@@ -2,3 +2,5 @@
 !*.*
 *.exe
 !*/
+dist/
+![Mm]akefile
