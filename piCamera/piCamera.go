@@ -12,7 +12,6 @@ import (
 
 	"errors"
 	"os"
-	"strconv"
 	"sync"
 )
 
@@ -24,14 +23,13 @@ var jpgMagic = []byte{0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46
 //PiCamera is thread safe so many calls to GetFrame() will not break.
 //Be careful as the more calls to GetFrame() the slower GetFrame() may become due to all the read locks.
 type PiCamera struct {
-	width     int
-	height    int
 	rwMutext  *sync.RWMutex
 	ctx       context.Context
 	cancel    context.CancelFunc
 	command   *exec.Cmd
 	stdOut    io.ReadCloser
 	latestImg []byte
+	args      *RaspividArgs
 }
 
 //New creates an instance of PiCamera.
@@ -40,7 +38,7 @@ type PiCamera struct {
 //
 //This creates the command raspivid with the appropriate settings.
 //The stdErr of the command is redirected to os.Stderr so that one may see why the command may have failed.
-func New(parentCtx context.Context, width, height int) (*PiCamera, error) {
+func New(parentCtx context.Context, args *RaspividArgs) (*PiCamera, error) {
 	var ctx context.Context
 	var cancel context.CancelFunc
 	if parentCtx == nil {
@@ -48,7 +46,11 @@ func New(parentCtx context.Context, width, height int) (*PiCamera, error) {
 	} else {
 		ctx, cancel = context.WithCancel(parentCtx)
 	}
-	cmd := exec.CommandContext(ctx, "raspivid", "-cd", "MJPEG", "-t", "0", "-w", strconv.Itoa(width), "-h", strconv.Itoa(height), "-o", "-")
+	cmd, err := createCommand(ctx, args)
+	if err != nil {
+		cancel()
+		return nil, err
+	}
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
 		cancel()
@@ -56,8 +58,6 @@ func New(parentCtx context.Context, width, height int) (*PiCamera, error) {
 	}
 	cmd.Stderr = os.Stderr
 	return &PiCamera{
-		width:    width,
-		height:   height,
 		ctx:      ctx,
 		cancel:   cancel,
 		command:  cmd,

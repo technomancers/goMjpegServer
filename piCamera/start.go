@@ -26,7 +26,7 @@ func (pc *PiCamera) Start() error {
 		return err
 	}
 	fg, bg := image.White, image.Black
-	rgba := image.NewRGBA(image.Rect(0, 0, pc.width, pc.height))
+	rgba := image.NewRGBA(image.Rect(0, 0, pc.args.Width, pc.args.Height))
 	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
 	c := freetype.NewContext()
 	c.SetDPI(72)
@@ -38,7 +38,7 @@ func (pc *PiCamera) Start() error {
 	c.SetHinting(font.HintingNone)
 	str := "You are not running running on a pi."
 	base := int(float64(c.PointToFixed(20)>>6) / 2)
-	pt := freetype.Pt((pc.width/2)-(len(str)*5), (pc.height/2)-base)
+	pt := freetype.Pt((pc.args.Width/2)-(len(str)*5), (pc.args.Height/2)-base)
 	_, err = c.DrawString(str, pt)
 	if err != nil {
 		return err
