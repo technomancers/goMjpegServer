@@ -56,7 +56,7 @@ func NewArgs() *RaspividArgs {
 }
 
 func createCommand(ctx context.Context, args *RaspividArgs) *exec.Cmd {
-	cmd := exec.CommandContext(ctx, "raspivid", "-cd", "MJPEG", "-t", "0", "-o", "-")
+	cmd := exec.CommandContext(ctx, "raspivid", "-cd", "MJPEG", "-t", "0")
 	var final []string
 	if args.Width != 0 {
 		final = append(final, "-w", strconv.Itoa(args.Width))
@@ -148,5 +148,7 @@ func createCommand(ctx context.Context, args *RaspividArgs) *exec.Cmd {
 	if args.InsertHeaders {
 		final = append(final, "-ih")
 	}
+	final = append(final, "-o", "-")
+	cmd.Args = append(cmd.Args, final...)
 	return cmd
 }

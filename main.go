@@ -40,7 +40,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	piArgs := piCamera.NewArgs()
-	piArgs.Mode = 7
+	piArgs.Width = 640
+	piArgs.Height = 480
 	piCamera, err := piCamera.New(ctx, piArgs)
 	if err != nil {
 		log.Fatalf("Could not create an instance of PiCamera: %v\n", err)
