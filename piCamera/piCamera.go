@@ -46,11 +46,7 @@ func New(parentCtx context.Context, args *RaspividArgs) (*PiCamera, error) {
 	} else {
 		ctx, cancel = context.WithCancel(parentCtx)
 	}
-	cmd, err := createCommand(ctx, args)
-	if err != nil {
-		cancel()
-		return nil, err
-	}
+	cmd := createCommand(ctx, args)
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
 		cancel()

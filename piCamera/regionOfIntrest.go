@@ -1,5 +1,9 @@
 package piCamera
 
+import (
+	"fmt"
+)
+
 //RegionOfIntrest is used to set the cameras area to be used as the source.
 type RegionOfIntrest struct {
 	tlX float32
@@ -19,4 +23,9 @@ func NewROI(tlx, tly, w, h float32) *RegionOfIntrest {
 		w:   w,
 		h:   h,
 	}
+}
+
+//Convert takes the type and returns the string representation of that value.
+func (t *RegionOfIntrest) Convert() string {
+	return fmt.Sprintf("%.2f,%.2f,%.2f,%.2f", t.tlX, t.tlY, t.w, t.h)
 }

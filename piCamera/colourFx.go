@@ -1,5 +1,9 @@
 package piCamera
 
+import (
+	"fmt"
+)
+
 //ColourEffect is used fo setting which color effect one wants.
 type ColourEffect struct {
 	u int
@@ -13,4 +17,9 @@ func NewColourEffect(u, v int) *ColourEffect {
 		u: u,
 		v: v,
 	}
+}
+
+//Convert takes the type and returns the string representation of that value.
+func (t *ColourEffect) Convert() string {
+	return fmt.Sprintf("%d:%d", t.u, t.v)
 }

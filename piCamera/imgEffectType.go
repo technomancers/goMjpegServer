@@ -39,3 +39,46 @@ const (
 	//ImfxSaturation colour saturate the image
 	ImfxSaturation
 )
+
+//Convert takes the type and returns the string representation of that value.
+//Returns true as well if it is the default value.
+func (t ImgEffectType) Convert() (string, bool) {
+	switch t {
+	case ImfxNone:
+		return "none", true
+	case ImfxNegative:
+		return "negative", false
+	case ImfxSolarise:
+		return "solarise", false
+	case ImfxPosterise:
+		return "posterise", false
+	case ImfxWhiteboard:
+		return "whiteboard", false
+	case ImfxBlackboard:
+		return "blackboard", false
+	case ImfxSketch:
+		return "sketch", false
+	case ImfxDenoise:
+		return "denoise", false
+	case ImfxEmboss:
+		return "emboss", false
+	case ImfxOilpaint:
+		return "oilpaint", false
+	case ImfxHatch:
+		return "hatch", false
+	case ImfxGPen:
+		return "gpen", false
+	case ImfxPastel:
+		return "pastel", false
+	case ImfxWatercolour:
+		return "watercolour", false
+	case ImfxFilm:
+		return "film", false
+	case ImfxBlur:
+		return "blur", false
+	case ImfxSaturation:
+		return "saturation", false
+	default:
+		return "", true
+	}
+}
